@@ -1,0 +1,129 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    var tokens = Antiforgery.GetAndStoreTokens(Context);
+    ViewData["Title"] = "登入";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<body class="auth-page">
+
+<div class="signWrap">
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <div class="signContent s1 col-12 col-lg-6">
+                <div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="~/img/carousel1.png" class="ca1" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="~/img/carousel2.png" class="ca1" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="~/img/carousel3.png" class="ca1" alt="...">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="signContent s2 col-12 col-lg-6">
+                <div class="loginWrap mb-4">
+                    @* 使用 Url.Action 跳轉到註冊頁 *@
+                    <a href="@Url.Action("Login", "Auth")" class="inputLine loginH1 titleWrap titleH1">登&ensp;入</a>
+                    <a href="@Url.Action("Signup", "Auth")" class="inputNone SignH1 titleWrap titleH1">註&ensp;冊</a>
+                </div>
+
+                <form id="loginForm" class="loginForm">
+                    <div class="formWrap">
+                        <label class="account titleWrap titleH4 d-block">帳號 *</label>
+                        <div class="input_group_custom">
+                            <input id="email" name="email" class="input1 psw" type="email" placeholder="example@gmail.com">
+                        </div>
+                        
+                        <div id="emailHint" class="inputHint"></div>
+                    </div>
+
+                    <div class="formWrap">
+                        <label class="account titleWrap titleH4 d-block">密碼 *</label>
+                        <div class="input_group_custom">
+                            <input type="password" id="password" name="password" class="input1 psw" placeholder="6 到 18 位數密碼和大小寫英文">
+                            <span type="button" class="btn-toggle-pwd" data-target="#password" tabindex="-1">
+                                <img src="~/img/eye-closed.svg" alt="顯示密碼">
+                            </span>
+                        </div>
+                        <div id="pwdHint" class="inputHint"></div>
+
+
+                            <p class="privacy"> * 登入即表示您同意<a src="" class="privacyLink">隱私權政策</a>及<a src="" class="serviceLink">服務條款</a>。</p>
+                        <button type="button" class="btn btn_Gray confirmCheck eLabel mt-4" id="btnLogin" disabled>登入</button>
+                    </div>
+                    
+                    <div>
+                      
+                    </div>
+
+                    <div id="systemMessage" class="mt-3 p-2 d-none"></div>
+          
+                    <div class="lineBlackWrap">
+                        <div class="lineStroke"></div>
+                        <div class="lineBlack">或</div></div>
+                    <div class="GoogleWrap mt-4">
+                       
+                        <a href="/Auth/LoginGoogle">
+                            <img src="~/img/googleBtn.png" alt="Google 登入" class="googleBtn">
+                        </a>
+                    </div>
+                    <div class="backIndexWrap">
+                        <div class="backIndex back-home-link text-center">
+                            <a href="/Auth/ForgotPassword">忘記密碼</a>｜ <a href="/Auth/ForgotEmail">忘記帳號</a>
+                            ｜<a href="@Url.Action("Index", "Home")">回到首頁</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        window.csrfToken = "@tokens.RequestToken";
+    </script>
+
+    <!-- 只載入必要的共用套件與正確路徑的 helper/login -->
+    <script src="~/js/AuthApi/login.js" asp-append-version="true"></script>
+
+    <script>
+        $(function () {
+            // 確保 helper.js 載入後執行綁定
+            if (typeof bindPasswordToggle === 'function') {
+                bindPasswordToggle();
+            }
+        });
+    </script>
+
+    @if (TempData["RegSuccess"]?.ToString() == "true")
+    {
+        <script>
+            $(function() {
+                showPopup({
+                    title: "註冊成功",
+                    message: "歡迎加入！現在可以開始登入了。",
+                    type: "success",
+                    autoClose: true,
+                    seconds: 5
+                });
+            });
+        </script>
+    }
+}
+</body>
+

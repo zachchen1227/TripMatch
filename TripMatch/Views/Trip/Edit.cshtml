@@ -1,0 +1,61 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@{
+    ViewData["Title"] = "編輯行程";
+    Layout = "~/Views/Shared/_Layout-copy.cshtml";
+}
+
+@model int
+
+
+@* 1. 頁面專屬 CSS 區塊 *@
+@section Styles {
+    <link rel="stylesheet" href="~/css/trip/editTrip.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+}
+
+<div class="itinerary-wrapper">
+    <div class="left-panel">
+        <input type="hidden" id="current-trip-id" value="@Model" />
+
+        <div class="itinerary-nav p-3 bg-white border-bottom d-flex justify-content-between align-items-center">
+            <h5 id="current-trip-title" class="m-0 fw-bold"></h5>
+
+            <div class="btn-group btn-group-sm">
+                <button class="btn btn_light">行程</button>
+                <button class="btn btn_light">總覽</button>
+            </div>
+
+        </div>
+
+        <div class="itinerary-content p-0 overflow-auto" id="place-list">
+            @* JS 會將渲染後的 HTML 填入此處 *@           
+        </div>
+    </div>
+
+    <div class="right-panel">
+
+        @* 景點搜尋框 *@
+        <div class="search-container shadow-sm">
+            <div class="input-group search-box">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+
+                <input type="text" id="place-search-input" class="form-control border-start-0 ps-0" placeholder="搜尋景點..." />
+            </div>
+        </div>
+
+        @* Google地圖 *@
+        <div id="map"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="module" src="~/js/trip/editTrip.js" asp-append-version="true"></script>
+
+    <!-- 使用官方 loader，透過 Razor 注入 Key-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleMaps:ApiKey"]&libraries=places"></script>
+}
+
